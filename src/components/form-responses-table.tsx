@@ -45,7 +45,7 @@ import {
   getForm,
 } from "@/lib/actions/forms.action";
 import { findReferralCodeByCode } from "@/lib/actions/referral_codes.action";
-import { Form, FormStatus } from "@/lib/domains/forms.domain";
+import { Form, FormStatus, FormGender } from "@/lib/domains/forms.domain";
 import { toast } from "sonner";
 import { ReferralCode } from "@/lib/domains/referral_codes.domain";
 
@@ -172,6 +172,17 @@ export function FormResponsesTable() {
       hour: "2-digit",
       minute: "2-digit",
     });
+  };
+
+  const getGenderString = (gender: FormGender) => {
+    switch (gender) {
+      case FormGender.MALE:
+        return "Male";
+      case FormGender.FEMALE:
+        return "Female";
+      default:
+        return "Unknown";
+    }
   };
 
   if (loading) {
@@ -313,6 +324,13 @@ export function FormResponsesTable() {
               <div>
                 <h3 className="font-semibold text-sm text-gray-500">Age</h3>
                 <div className="mt-1">{selectedForm.age}</div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">Gender</h3>
+                <div className="mt-1">
+                  {getGenderString(selectedForm.gender)}
+                </div>
               </div>
 
               <div>
