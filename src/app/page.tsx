@@ -32,7 +32,9 @@ export default function Home() {
             <div className="h-1 w-20 bg-purple-500 mx-auto mb-4"></div>
             <p className="text-lg text-gray-600 max-w-md mx-auto">
               We&apos;re looking for talented individuals to help us build the
-              future. Complete the form below to start your journey with us.
+              future. Please provide your details including name, contact
+              information, age, gender, and eligibility to start your journey
+              with us.
             </p>
           </div>
           <ApplicationForm />

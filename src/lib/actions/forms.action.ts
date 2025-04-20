@@ -22,6 +22,7 @@ export async function createForm(form: Omit<Form, "$id" | "submitted_at" | "stat
                 email: form.email,
                 phone: form.phone,
                 age: form.age,
+                gender: form.gender,
                 requirement: form.requirement,
                 ref_code_id: form.ref_code_id,
                 submitted_at: new Date().toISOString(),
