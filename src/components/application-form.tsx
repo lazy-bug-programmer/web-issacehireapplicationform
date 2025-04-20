@@ -35,10 +35,11 @@ const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().min(10, { message: "Please enter a valid phone number." }),
+  age: z.number().min(18, { message: "You must be at least 18 years old." }),
   refCode: z
     .string()
     .min(6, { message: "Reference code must be at least 6 characters." }),
-  hasLocalBankAccount: z.boolean().refine((val) => val === true, {
+  requirement: z.boolean().refine((val) => val === true, {
     message: "You must have a local bank account to apply.",
   }),
 });
@@ -54,8 +55,9 @@ export function ApplicationForm() {
       name: "",
       email: "",
       phone: "",
+      age: 18,
       refCode: "",
-      hasLocalBankAccount: false,
+      requirement: false,
     },
   });
 
@@ -99,6 +101,9 @@ export function ApplicationForm() {
       const response = await createForm({
         name: values.name,
         email: values.email,
+        phone: values.phone,
+        age: values.age,
+        requirement: values.requirement,
         ref_code_id: values.refCode,
       });
 
@@ -217,33 +222,19 @@ export function ApplicationForm() {
 
               <FormField
                 control={form.control}
-                name="refCode"
+                name="age"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-gray-700">
-                      Reference Code
-                    </FormLabel>
+                    <FormLabel className="text-gray-700">Age</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter your reference code"
+                        type="number"
+                        placeholder="Enter your age"
                         {...field}
-                        onChange={(e) => {
-                          field.onChange(e.target.value.toUpperCase());
-                          setRefCodeError(null); // Clear error when changing value
-                        }}
-                        className={`border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 ${
-                          refCodeError ? "border-red-500" : ""
-                        }`}
+                        onChange={(e) => field.onChange(Number(e.target.value))}
+                        className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200"
                       />
                     </FormControl>
-                    <FormDescription className="text-xs">
-                      You should have received a reference code from our team.
-                    </FormDescription>
-                    {refCodeError && (
-                      <p className="text-sm font-medium text-red-500 mt-1">
-                        {refCodeError}
-                      </p>
-                    )}
                     <FormMessage />
                   </FormItem>
                 )}
@@ -252,7 +243,41 @@ export function ApplicationForm() {
 
             <FormField
               control={form.control}
-              name="hasLocalBankAccount"
+              name="refCode"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700">
+                    Reference Code
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter your reference code"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e.target.value.toUpperCase());
+                        setRefCodeError(null); // Clear error when changing value
+                      }}
+                      className={`border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 ${
+                        refCodeError ? "border-red-500" : ""
+                      }`}
+                    />
+                  </FormControl>
+                  <FormDescription className="text-xs">
+                    You should have received a reference code from our team.
+                  </FormDescription>
+                  {refCodeError && (
+                    <p className="text-sm font-medium text-red-500 mt-1">
+                      {refCodeError}
+                    </p>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="requirement"
               render={({ field }) => (
                 <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border border-gray-200 p-4 shadow-sm bg-white">
                   <FormControl>

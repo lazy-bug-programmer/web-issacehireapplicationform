@@ -13,7 +13,6 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname.startsWith('/admin')) {
         try {
             const user = await getLoggedInUser()
-            console.log('User:', user);
 
             // Verify if user has admin privileges
             if (!user || !user.labels?.includes('ADMIN')) {

@@ -305,6 +305,41 @@ export function FormResponsesTable() {
 
               <div>
                 <h3 className="font-semibold text-sm text-gray-500">
+                  Phone Number
+                </h3>
+                <div className="mt-1">{selectedForm.phone}</div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">Age</h3>
+                <div className="mt-1">{selectedForm.age}</div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">
+                  Has Local Bank Account
+                </h3>
+                <div className="mt-1">
+                  {selectedForm.requirement ? (
+                    <Badge
+                      variant="outline"
+                      className="bg-green-100 text-green-800 border-green-200"
+                    >
+                      Yes
+                    </Badge>
+                  ) : (
+                    <Badge
+                      variant="outline"
+                      className="bg-red-100 text-red-800 border-red-200"
+                    >
+                      No
+                    </Badge>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="font-semibold text-sm text-gray-500">
                   Reference Code
                 </h3>
                 <div className="mt-1 font-mono">{selectedForm.ref_code_id}</div>
