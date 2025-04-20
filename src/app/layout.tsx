@@ -4,8 +4,8 @@ import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
-  title: "Hiring Application Form",
-  description: "Hiring Application Form",
+  title: "GlobalHire",
+  description: "GlobalHire",
 };
 
 export default function RootLayout({
