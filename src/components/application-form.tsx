@@ -26,15 +26,26 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 
 import { createForm } from "@/lib/actions/forms.action";
 import { validateReferralCode } from "@/lib/actions/referral_codes.action";
+import { FormGender } from "@/lib/domains/forms.domain";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email({ message: "Please enter a valid email address." }),
   phone: z.string().min(10, { message: "Please enter a valid phone number." }),
+  gender: z.enum(["male", "female"], {
+    message: "Please select a gender.",
+  }),
   age: z.number().min(18, { message: "You must be at least 18 years old." }),
   refCode: z
     .string()
@@ -55,6 +66,7 @@ export function ApplicationForm() {
       name: "",
       email: "",
       phone: "",
+      gender: undefined,
       age: 18,
       refCode: "",
       requirement: false,
@@ -97,11 +109,16 @@ export function ApplicationForm() {
         return;
       }
 
+      // Convert string gender to numeric enum
+      const genderValue =
+        values.gender === "male" ? FormGender.MALE : FormGender.FEMALE;
+
       // Submit the form
       const response = await createForm({
         name: values.name,
         email: values.email,
         phone: values.phone,
+        gender: genderValue,
         age: values.age,
         requirement: values.requirement,
         ref_code_id: values.refCode,
@@ -222,6 +239,33 @@ export function ApplicationForm() {
 
               <FormField
                 control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">Gender</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200">
+                          <SelectValue placeholder="Select your gender" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="male">Male</SelectItem>
+                        <SelectItem value="female">Female</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <FormField
+                control={form.control}
                 name="age"
                 render={({ field }) => (
                   <FormItem>
@@ -239,41 +283,41 @@ export function ApplicationForm() {
                   </FormItem>
                 )}
               />
-            </div>
 
-            <FormField
-              control={form.control}
-              name="refCode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="text-gray-700">
-                    Reference Code
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Enter your reference code"
-                      {...field}
-                      onChange={(e) => {
-                        field.onChange(e.target.value.toUpperCase());
-                        setRefCodeError(null); // Clear error when changing value
-                      }}
-                      className={`border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 ${
-                        refCodeError ? "border-red-500" : ""
-                      }`}
-                    />
-                  </FormControl>
-                  <FormDescription className="text-xs">
-                    You should have received a reference code from our team.
-                  </FormDescription>
-                  {refCodeError && (
-                    <p className="text-sm font-medium text-red-500 mt-1">
-                      {refCodeError}
-                    </p>
-                  )}
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="refCode"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">
+                      Reference Code
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your reference code"
+                        {...field}
+                        onChange={(e) => {
+                          field.onChange(e.target.value.toUpperCase());
+                          setRefCodeError(null); // Clear error when changing value
+                        }}
+                        className={`border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200 ${
+                          refCodeError ? "border-red-500" : ""
+                        }`}
+                      />
+                    </FormControl>
+                    <FormDescription className="text-xs">
+                      You should have received a reference code from our team.
+                    </FormDescription>
+                    {refCodeError && (
+                      <p className="text-sm font-medium text-red-500 mt-1">
+                        {refCodeError}
+                      </p>
+                    )}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <FormField
               control={form.control}
