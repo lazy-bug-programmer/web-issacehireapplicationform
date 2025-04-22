@@ -72,7 +72,10 @@ export async function getForms(filters?: { status?: FormStatus }) {
     try {
         const { databases } = await createAdminClient();
 
-        const queries = [];
+        const queries = [
+            Query.limit(10000),
+            Query.orderDesc("submitted_at")
+        ];
 
         if (filters?.status !== undefined) {
             queries.push(Query.equal("status", filters.status));
@@ -83,6 +86,8 @@ export async function getForms(filters?: { status?: FormStatus }) {
             FORMS_COLLECTION_ID,
             queries
         );
+
+        console.log(forms.documents.length)
 
         return {
             success: true,

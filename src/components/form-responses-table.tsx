@@ -37,7 +37,15 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { MoreHorizontal, Check, X, Trash, Eye } from "lucide-react";
+import {
+  MoreHorizontal,
+  Check,
+  X,
+  Trash,
+  Eye,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import {
   getForms,
   updateFormStatus,
@@ -58,16 +66,30 @@ export function FormResponsesTable() {
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   const [refCodeData, setRefCodeData] = useState<ReferralCode | null>(null);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [formsPerPage] = useState(10);
+  const [totalForms, setTotalForms] = useState(0);
+  const [allForms, setAllForms] = useState<Form[]>([]);
+
   useEffect(() => {
     loadForms();
   }, []);
+
+  // Update displayed forms when page changes
+  useEffect(() => {
+    paginateForms();
+  }, [currentPage, allForms]);
 
   const loadForms = async () => {
     setLoading(true);
     try {
       const response = await getForms();
       if (response.success) {
-        setForms(response.data as unknown as Form[]);
+        const fetchedForms = response.data as unknown as Form[];
+        setAllForms(fetchedForms);
+        setTotalForms(fetchedForms.length);
+        paginateForms();
       } else {
         toast("Failed to load forms");
       }
@@ -77,6 +99,13 @@ export function FormResponsesTable() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const paginateForms = () => {
+    const indexOfLastForm = currentPage * formsPerPage;
+    const indexOfFirstForm = indexOfLastForm - formsPerPage;
+    const currentForms = allForms.slice(indexOfFirstForm, indexOfLastForm);
+    setForms(currentForms);
   };
 
   const handleStatusChange = async (formId: string, status: FormStatus) => {
@@ -185,6 +214,21 @@ export function FormResponsesTable() {
     }
   };
 
+  // Pagination controls
+  const totalPages = Math.ceil(totalForms / formsPerPage);
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   if (loading) {
     return <div className="py-10 text-center">Loading form responses...</div>;
   }
@@ -269,6 +313,38 @@ export function FormResponsesTable() {
           )}
         </TableBody>
       </Table>
+
+      {/* Pagination UI */}
+      <div className="flex items-center justify-between px-4 py-4 border-t">
+        <div className="text-sm text-gray-500">
+          Showing <span className="font-medium">{forms.length}</span> of{" "}
+          <span className="font-medium">{totalForms}</span> responses
+        </div>
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={goToPreviousPage}
+            disabled={currentPage === 1}
+          >
+            <ChevronLeft className="h-4 w-4 mr-1" />
+            Previous
+          </Button>
+          <div className="text-sm">
+            Page <span className="font-medium">{currentPage}</span> of{" "}
+            <span className="font-medium">{totalPages || 1}</span>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={goToNextPage}
+            disabled={currentPage === totalPages || totalPages === 0}
+          >
+            Next
+            <ChevronRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
+      </div>
 
       {/* Details Dialog */}
       <Dialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog}>

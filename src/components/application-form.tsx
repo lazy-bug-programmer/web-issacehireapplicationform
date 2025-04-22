@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { CheckCircle2, ChevronRight, Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -113,11 +115,16 @@ export function ApplicationForm() {
       const genderValue =
         values.gender === "male" ? FormGender.MALE : FormGender.FEMALE;
 
+      // Ensure phone number has the country code prefix
+      const formattedPhone = values.phone.startsWith("+")
+        ? values.phone
+        : `+${values.phone}`;
+
       // Submit the form
       const response = await createForm({
         name: values.name,
         email: values.email,
-        phone: values.phone,
+        phone: formattedPhone,
         gender: genderValue,
         age: values.age,
         requirement: values.requirement,
@@ -226,10 +233,35 @@ export function ApplicationForm() {
                       Phone Number
                     </FormLabel>
                     <FormControl>
-                      <Input
-                        placeholder="Enter your phone number"
-                        {...field}
-                        className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200"
+                      <PhoneInput
+                        country={"us"}
+                        value={field.value}
+                        onChange={(phone) => field.onChange(phone)}
+                        inputStyle={{
+                          width: "100%",
+                          height: "40px",
+                          fontSize: "16px",
+                          borderColor: refCodeError
+                            ? "rgb(239, 68, 68)"
+                            : "rgb(209, 213, 219)",
+                        }}
+                        containerStyle={{
+                          width: "100%",
+                        }}
+                        buttonStyle={{
+                          backgroundColor: "white",
+                          borderColor: refCodeError
+                            ? "rgb(239, 68, 68)"
+                            : "rgb(209, 213, 219)",
+                          borderWidth: "1px",
+                          borderRightWidth: "0px",
+                        }}
+                        dropdownStyle={{
+                          width: "300px",
+                        }}
+                        enableSearch={true}
+                        disableSearchIcon={false}
+                        searchPlaceholder="Search countries"
                       />
                     </FormControl>
                     <FormMessage />
