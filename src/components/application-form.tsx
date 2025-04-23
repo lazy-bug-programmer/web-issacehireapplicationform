@@ -179,6 +179,8 @@ export function ApplicationForm() {
         </CardTitle>
         <CardDescription className="text-gray-600">
           Please fill out all required fields to submit your application.
+          Recruiters will contact you thourgh WhatsApp, kindly provide your
+          phone numbers with WhatsApp.
         </CardDescription>
       </CardHeader>
       <Form {...form}>
