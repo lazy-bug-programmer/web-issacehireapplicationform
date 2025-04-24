@@ -48,7 +48,7 @@ const formSchema = z.object({
   gender: z.enum(["male", "female"], {
     message: "Please select a gender.",
   }),
-  age: z.number().min(18, { message: "You must be at least 18 years old." }),
+  age: z.number().min(21, { message: "You must be at least 21 years old." }),
   refCode: z
     .string()
     .min(6, { message: "Reference code must be at least 6 characters." }),
@@ -69,7 +69,7 @@ export function ApplicationForm() {
       email: "",
       phone: "",
       gender: undefined,
-      age: 18,
+      age: 21,
       refCode: "",
       requirement: false,
     },
