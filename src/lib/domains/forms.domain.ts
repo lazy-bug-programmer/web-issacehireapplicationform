@@ -4,8 +4,9 @@ export interface Form {
   email: string;
   phone: string;
   age: number;
+  nationality: string;
   gender: FormGender;
-  requirement: boolean; // have local bank
+  requirement: boolean;
   ref_code_id: string;
   submitted_at: Date;
   status: FormStatus;

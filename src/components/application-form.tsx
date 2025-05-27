@@ -49,6 +49,7 @@ const formSchema = z.object({
     message: "Please select a gender.",
   }),
   age: z.number().min(21, { message: "You must be at least 21 years old." }),
+  nationality: z.string().min(2, { message: "Please enter your nationality." }),
   refCode: z
     .string()
     .min(6, { message: "Reference code must be at least 6 characters." }),
@@ -70,6 +71,7 @@ export function ApplicationForm() {
       phone: "",
       gender: undefined,
       age: 21,
+      nationality: "",
       refCode: "",
       requirement: false,
     },
@@ -127,6 +129,7 @@ export function ApplicationForm() {
         phone: formattedPhone,
         gender: genderValue,
         age: values.age,
+        nationality: values.nationality,
         requirement: values.requirement,
         ref_code_id: values.refCode,
       });
@@ -318,6 +321,26 @@ export function ApplicationForm() {
                 )}
               />
 
+              <FormField
+                control={form.control}
+                name="nationality"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-gray-700">Nationality</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your nationality"
+                        {...field}
+                        className="border-gray-300 focus:border-purple-500 focus:ring-purple-500 transition-all duration-200"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-2">
               <FormField
                 control={form.control}
                 name="refCode"
