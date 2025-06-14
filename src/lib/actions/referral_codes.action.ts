@@ -99,7 +99,10 @@ export async function getAllReferralCodes() {
 
     const referralCodes = await databases.listDocuments(
       DATABASE_ID,
-      REFERRAL_CODES_COLLECTION_ID
+      REFERRAL_CODES_COLLECTION_ID,
+      [
+        Query.limit(1000), // Adjust the limit as needed
+      ]
     );
 
     return {

@@ -33,8 +33,8 @@ export default function Home() {
             <p className="text-lg text-gray-600 max-w-md mx-auto">
               We&apos;re looking for talented individuals to help us build the
               future. Please provide your details including name, contact
-              information, age, gender, and eligibility to start your journey
-              with us.
+              information, age, gender, nationality, and eligibility to start
+              your journey with us.
             </p>
           </div>
           <ApplicationForm />

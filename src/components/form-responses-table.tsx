@@ -403,6 +403,13 @@ export function FormResponsesTable() {
               </div>
 
               <div>
+                <h3 className="font-semibold text-sm text-gray-500">
+                  Nationality
+                </h3>
+                <div className="mt-1">{selectedForm.nationality ?? "None"}</div>
+              </div>
+
+              <div>
                 <h3 className="font-semibold text-sm text-gray-500">Gender</h3>
                 <div className="mt-1">
                   {getGenderString(selectedForm.gender)}
